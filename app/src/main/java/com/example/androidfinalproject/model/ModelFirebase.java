@@ -19,9 +19,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-//import com.google.firebase.storage.FirebaseStorage;
-//import com.google.firebase.storage.StorageReference;
-//import com.google.firebase.storage.UploadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
@@ -35,7 +35,7 @@ import java.util.SortedMap;
 public class ModelFirebase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth auth = FirebaseAuth.getInstance();
-//    FirebaseStorage storage = FirebaseStorage.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public ModelFirebase() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -144,37 +144,37 @@ public class ModelFirebase {
                 });
     }
 
-//    public void saveImage(Bitmap imageBitmap, String imageName, SaveImageListener listener, String location) {
-//        StorageReference storageRef = storage.getReference();
-//        StorageReference imgRef = storageRef.child(location + imageName);
-//
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//
-//        UploadTask uploadTask = imgRef.putBytes(data);
-//        uploadTask.addOnFailureListener(exception -> listener.onComplete(null))
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//                            Uri downloadUrl = uri;
-//                            listener.onComplete(downloadUrl.toString());
-//                        });
-//                    }
-//                });
-//    }
-//
-//    public void deleteImage(String movieImageUrl, DeleteImageListener listener) {
-//        StorageReference storageReference = storage.getReference();
-//        StorageReference imageRef = storageReference.getStorage().getReferenceFromUrl(movieImageUrl);
-//        imageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                listener.onComplete();
-//            }
-//        });
-//    }
+    public void saveImage(Bitmap imageBitmap, String imageName, SaveImageListener listener, String location) {
+        StorageReference storageRef = storage.getReference();
+        StorageReference imgRef = storageRef.child(location + imageName);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imgRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception -> listener.onComplete(null))
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            Uri downloadUrl = uri;
+                            listener.onComplete(downloadUrl.toString());
+                        });
+                    }
+                });
+    }
+
+    public void deleteImage(String movieImageUrl, DeleteImageListener listener) {
+        StorageReference storageReference = storage.getReference();
+        StorageReference imageRef = storageReference.getStorage().getReferenceFromUrl(movieImageUrl);
+        imageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                listener.onComplete();
+            }
+        });
+    }
 
     public boolean isSignedIn() {
         FirebaseUser currentUser = auth.getCurrentUser();

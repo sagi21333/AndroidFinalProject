@@ -3,6 +3,7 @@ package com.example.androidfinalproject.model;
 import androidx.annotation.NonNull;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Movie {
@@ -11,10 +12,16 @@ public class Movie {
     String movieId;
     String title;
     String overview;
-    String [] genres; //Not sure which type is
-    String originalTitle;
-    Float movieRate;
+    ArrayList<String> genres = new ArrayList<String>(); //Not sure which type is
     Date releaseDate;
+
+    public Movie(@NonNull String movieId, String title, String overview, ArrayList<String> genres, Date releaseDate) {
+        this.movieId = movieId;
+        this.title = title;
+        this.overview = overview;
+        this.genres = genres;
+        this.releaseDate = releaseDate;
+    }
 
     @NonNull
     public String getMovieId() {
@@ -41,28 +48,12 @@ public class Movie {
         this.overview = overview;
     }
 
-    public String[] getGenres() {
+    public ArrayList<String> getGenres() {
         return genres;
     }
 
-    public void setGenres(String[] genres) {
+    public void setGenres(ArrayList<String> genres) {
         this.genres = genres;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public Float getMovieRate() {
-        return movieRate;
-    }
-
-    public void setMovieRate(Float movieRate) {
-        this.movieRate = movieRate;
     }
 
     public Date getReleaseDate() {
