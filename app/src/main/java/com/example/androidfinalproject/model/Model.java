@@ -67,6 +67,14 @@ public class Model {
         return myReviews;
     }
 
+    public LiveData<List<Movie>> getMovies() {
+        if (movieList.getValue() == null) {
+            getAllMovies();
+        }
+
+        return movieList;
+    }
+
     public void deleteReview(String reviewKey, ModelFirebase.DeleteReviewListener listener) {
         modelFirebase.deleteReview(reviewKey, () -> {
             listener.onComplete();
@@ -79,6 +87,14 @@ public class Model {
         List<Review> reviewsList = reviewList.getValue();
         Review review = reviewsList.stream().filter(rev -> rev.getDocumentId().equals(documentId)).findFirst().orElse(null);
         return review;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Movie getMovieById(String MovieId) {
+
+        List<Movie> moviesList = movieList.getValue();
+        Movie movie = moviesList.stream().filter(rev -> rev.getMovieId().equals(MovieId)).findFirst().orElse(null);
+        return movie;
     }
 
     public MutableLiveData<LoadingState> getLoadingState() {
