@@ -11,10 +11,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.androidfinalproject.model.Model;
+import com.example.androidfinalproject.model.ModelFirebase;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class loginFragment extends Fragment {
 
-    EditText username;
+    EditText email;
     EditText password;
     Button confirmBtn;
     TextView toRegister;
@@ -25,11 +32,42 @@ public class loginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        username = (EditText) view.findViewById(R.id.login_username_edittxt);
+        email = (EditText) view.findViewById(R.id.login_username_edittxt);
         password = (EditText) view.findViewById(R.id.login_password_edittxt);
         confirmBtn = view.findViewById(R.id.login_login_btn);
         toRegister = view.findViewById(R.id.login_signup_txtview);
 
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emailString = email.getText().toString();
+                String passwordString = password.getText().toString();
+
+                if (emailString.equals("") ||
+                        passwordString.equals("")) {
+                    Toast.makeText(MyApplication.getContext(), "email and password are required", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (!Pattern.compile("^(.+)@(\\S+)$").matcher(emailString).matches()) {
+                    Toast.makeText(MyApplication.getContext(), "not an email type", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (Pattern.compile("^.{0,5}$").matcher(passwordString).matches()) {
+                    Toast.makeText(MyApplication.getContext(), "password is too short (at least 6)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Model.instance.signIn(emailString, passwordString, new ModelFirebase.SignIn() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(MyApplication.getContext(), "Login successfully", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_moviesFragment2);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        Toast.makeText(MyApplication.getContext(), "Please check your credentials details", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
         toRegister.setOnClickListener(new View.OnClickListener() {
             @Override
