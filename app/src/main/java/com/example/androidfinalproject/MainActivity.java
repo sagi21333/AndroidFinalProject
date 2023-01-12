@@ -9,6 +9,8 @@ import androidx.navigation.ui.NavigationUI;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.androidfinalproject.model.Model;
+
 public class MainActivity extends AppCompatActivity {
     NavController navCtrl;
 
@@ -21,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
         navCtrl = navHost.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navCtrl);
 
-//        if (Model.instance.isSignedIn()) {
-//            navCtrl.navigate(R.id.action_loginFragment_to_allReviewsFragment);
-//        }
+        if (Model.instance.isSignedIn()) {
+            navCtrl.navigate(R.id.action_loginFragment_to_moviesFragment2);
+        }
     }
 
     @Override
