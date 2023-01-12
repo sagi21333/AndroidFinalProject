@@ -109,7 +109,8 @@ public class Model {
         ArrayList<String> geners = new ArrayList<String>();
         geners.add("drama");
         for (int i =0; i<10; i++) {
-            new Movie("" + i, "movie"+i, "bla", geners,new Date ());
+            Movie movie = new Movie("" + i, "movie"+i, "bla", geners,new Date (), "");
+            movies.add(movie);
         }
 
         //Todo: get all the movies from the api and localdb

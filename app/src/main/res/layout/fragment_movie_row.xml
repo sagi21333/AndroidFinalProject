@@ -57,15 +57,6 @@
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/movie_rating_txtview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="9.9"
-        app:layout_constraintBottom_toTopOf="@+id/movie_releasedate_txtview"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/movie_name_txtview" />
 
     <TextView
         android:id="@+id/movie_releasedate_txtview"
