@@ -48,10 +48,8 @@ public class MovieListFragment extends Fragment {
         adapter.setOnItemClickListener(new MovieAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                String documentId = viewModel.getMovieByPos(pos).getMovieId();
-
-//                MovieListFragmentDirections.ActionStudentsListFragmentToBlueFragment action = MovieListFragmentDirections.action_moviesFragment_to_movieReviewFragment(documentId);
-//                Navigation.findNavController(view).navigate(action);
+                String movieId = viewModel.getMovieByPos(pos).getMovieId();
+                Navigation.findNavController(view).navigate(MoviesFragmentDirections.actionMoviesFragmentToMovieReviewFragment(movieId));
             }
 
         });
