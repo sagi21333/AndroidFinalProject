@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 
 class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
-        ReviewRecyclerAdapter.OnItemClickListener listener;
+        OnItemClickListener listener;
         int buttonsVisible;
         public static interface OnItemClickListener{
             void onItemClick(int pos);
@@ -25,7 +25,6 @@ class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
             this.inflater = inflater;
             this.buttonsVisible = visibility;
         }
-
 
         void setOnItemClickListener(ReviewRecyclerAdapter.OnItemClickListener listener){
             this.listener = listener;
@@ -47,7 +46,7 @@ class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
 
         @Override
         public int getItemCount() {
-            return MovieListViewModel.getData().getValue() == null ? 0 : MovieListViewModel.getData().getValue().size();
+            return ReviewListViewModel.getData().getValue() == null ? 0 : ReviewListViewModel.getData().getValue().size();
         }
     }
 

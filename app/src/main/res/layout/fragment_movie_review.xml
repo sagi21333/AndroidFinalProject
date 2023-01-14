@@ -67,14 +67,20 @@
         app:layout_constraintTop_toTopOf="@+id/textView13" />
 
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="com.example.androidfinalproject.ReviewListFragment"
-        android:layout_width="415dp"
-        android:layout_height="484dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/listReviewSwipeRefresh"
+        android:layout_width="401dp"
+        android:layout_height="493dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.672"
-        tools:layout="@layout/fragment_review_list"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_reviews_img"
+        app:layout_constraintVertical_bias="0.3">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listReviewRV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
