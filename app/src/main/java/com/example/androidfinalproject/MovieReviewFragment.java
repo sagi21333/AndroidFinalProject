@@ -1,10 +1,16 @@
 package com.example.androidfinalproject;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +36,16 @@ public class MovieReviewFragment extends Fragment {
 //    TextView releasedate;
 
     FragmentMovieReviewBinding binding;
+    ReviewRecyclerAdapter adapter;
+    ReviewListViewModel viewModel;
+    SwipeRefreshLayout swipeRefresh;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        String movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
+        viewModel = new ReviewListViewModel(movieId);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,10 +54,40 @@ public class MovieReviewFragment extends Fragment {
         binding = FragmentMovieReviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        RecyclerView reviewList = binding.listReviewRV;
+        swipeRefresh = view.findViewById(R.id.listReviewSwipeRefresh);
+        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshReviews());
+
+        reviewList.setHasFixedSize(true);
+        reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //Get the movie id
         String movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
         Movie movie = Model.instance.getMovieById(movieId);
 
+        adapter = new ReviewRecyclerAdapter(0);
+        binding.listReviewRV.setAdapter(adapter);
         binding.movieReviewsNameTxt.setText(movie.getTitle());
+
+        adapter.setOnItemClickListener(new ReviewRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int pos) {
+                String documentId = viewModel.getReviewByPos(pos).getDocumentId();
+                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToDisplayReviewFragment2(documentId));
+            }
+        });
+
+        reviewList.setAdapter(adapter);
+        Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+            if (loadingState == Model.LoadingState.loading) {
+                swipeRefresh.setRefreshing(true);
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+
+        // Get all the reviews of the movie
+        ReviewListViewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
 
         if (movie.getMovieImageUrl() != null &&
                 !movie.getMovieImageUrl().equals("")) {
@@ -54,8 +100,14 @@ public class MovieReviewFragment extends Fragment {
 
         binding.movieReviewsReleasedateTxt.setText(dateFormat.format(movie.getReleaseDate()));
 
+        for (String s : movie.getGenres()) {
+            binding.movieReviewsGenresTxt.append(s + "  ");
+        }
+
         return view;
 
     }
-
+        private void refresh() {
+        adapter.notifyDataSetChanged();
+    }
 }

@@ -18,7 +18,6 @@ public class ReviewListViewModel extends ViewModel{
         } else {
             data = Model.instance.getMyReviews();
         }
-
     }
 
     public Review getReviewByPos(int position) {
