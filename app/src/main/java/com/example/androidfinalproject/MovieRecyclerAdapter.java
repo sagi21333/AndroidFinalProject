@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 
 
 
-    class MovieAdapter extends RecyclerView.Adapter<MovieViewHolder> {
+    class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         OnItemClickListener listener;
         public static interface OnItemClickListener{
             void onItemClick(int pos);
@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 
         LayoutInflater inflater;
 
-        public MovieAdapter(){
+        public MovieRecyclerAdapter(){
             this.inflater = inflater;
         }
 
@@ -71,10 +71,9 @@ import java.text.SimpleDateFormat;
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
             movieReleaseDate.setText(dateFormat.format(movie.getReleaseDate()));
-
         }
 
-        public MovieViewHolder(@NonNull View view, MovieAdapter.OnItemClickListener listener) {
+        public MovieViewHolder(@NonNull View view, MovieRecyclerAdapter.OnItemClickListener listener) {
             super(view);
             movieName = view.findViewById(R.id.movie_name_txtview);
             movieImage = view.findViewById(R.id.movie_img);

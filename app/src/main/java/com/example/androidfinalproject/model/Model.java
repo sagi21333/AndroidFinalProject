@@ -90,6 +90,13 @@ public class Model {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<Review> getReviewsMovie(String movieId) {
+        List<Review> reviewsList = reviewList.getValue();
+        List<Review> reviewlistMovie = (List<Review>) reviewsList.stream().map(rev -> rev.getMovieId().equals(movieId));
+        return reviewlistMovie;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public Movie getMovieById(String MovieId) {
 
         List<Movie> moviesList = movieList.getValue();

@@ -94,8 +94,5 @@
         <argument
             android:name="documentId"
             app:argType="string" />
-        <argument
-            android:name="MovieId"
-            app:argType="string" />
     </fragment>
 </navigation>

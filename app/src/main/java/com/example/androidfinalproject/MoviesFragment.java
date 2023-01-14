@@ -43,10 +43,10 @@ public class MoviesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.toMyReviews:
-                Navigation.findNavController(getView()).navigate(R.id.action_moviesFragment_to_myReviewsFragment);
+                Navigation.findNavController(getView()).navigate(MoviesFragmentDirections.actionMoviesFragmentToMyReviewsFragment());
                 return true;
             case R.id.toMyDetails:
-                Navigation.findNavController(getView()).navigate(R.id.action_moviesFragment_to_userDetailsFragment);
+                Navigation.findNavController(getView()).navigate(MoviesFragmentDirections.actionMoviesFragmentToUserDetailsFragment());
                 return true;
             case R.id.Logout:
                 Model.instance.logout();
