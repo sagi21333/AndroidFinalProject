@@ -87,7 +87,7 @@ public class MovieReviewFragment extends Fragment {
         });
 
         // Get all the reviews of the movie
-//        ReviewListViewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
+        ReviewListViewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
 
         if (movie.getMovieImageUrl() != null &&
                 !movie.getMovieImageUrl().equals("")) {
@@ -99,6 +99,10 @@ public class MovieReviewFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         binding.movieReviewsReleasedateTxt.setText(dateFormat.format(movie.getReleaseDate()));
+
+        for (String s : movie.getGenres()) {
+            binding.movieReviewsGenresTxt.append(s + "  ");
+        }
 
         return view;
 
