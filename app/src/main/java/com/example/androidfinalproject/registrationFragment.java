@@ -1,64 +1,138 @@
 package com.example.androidfinalproject;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link registrationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.androidfinalproject.databinding.FragmentRegistrationBinding;
+import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
+import com.example.androidfinalproject.model.Model;
+import com.example.androidfinalproject.model.ModelFirebase;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
 public class registrationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    ActivityResultLauncher<Uri> mTakeImage;
+    ActivityResultLauncher<Void> cameraLauncer;
+    Uri movieImageUri;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public registrationFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment registrationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static registrationFragment newInstance(String param1, String param2) {
-        registrationFragment fragment = new registrationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    FragmentRegistrationBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Sign Up");
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+        binding = FragmentRegistrationBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        binding.cameraImg.setOnClickListener(v -> {
+            cameraLauncer.launch(null);
+        });
+
+        binding.signupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEnableScreen(false);
+                String userEmail = binding.emailTxt.getText().toString().toLowerCase(Locale.ROOT);
+                Model.instance.register(userEmail,
+                        binding.passwordTxt.getText().toString(),
+                        new ModelFirebase.Register() {
+                            @Override
+                            public void onSuccess() {
+                                Bitmap bitmap = ((BitmapDrawable) binding.userImg.getDrawable()).getBitmap();
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                                Model.instance.saveImageAvatar(bitmap, userEmail, new ModelFirebase.SaveImageListener() {
+                                    @Override
+                                    public void onComplete(String url) {
+                                        Model.instance.setUserDetails(userEmail,
+                                                binding.firstnameTxt.getText().toString(),
+                                                binding.lastnameTxt.getText().toString(),
+                                                url,
+                                                new ModelFirebase.RegisterDetails() {
+                                                    @Override
+                                                    public void onSuccess() {
+                                                        Toast.makeText(MyApplication.getContext(), "User was created successfully", Toast.LENGTH_SHORT).show();
+                                                        Navigation.findNavController(getView()).navigate(R.id.action_registrationFragment_to_moviesFragment);
+                                                    }
+                                                });
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailed(String failReason) {
+                                Toast.makeText(MyApplication.getContext(), failReason, Toast.LENGTH_SHORT).show();
+                                setEnableScreen(true);
+                                return;
+                            }
+                        });
+            }
+        });
+
+        binding.signinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_registrationFragment_to_loginFragment);
+            }
+        });
+
+        cameraLauncer = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), new ActivityResultCallback<Bitmap>() {
+            @Override
+            public void onActivityResult(Bitmap result) {
+                binding.userImg.setImageBitmap(result);
+            }
+        });
+
+        mTakeImage = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (result.booleanValue()) {
+                    binding.userImg.setImageURI(movieImageUri);
+                }
+            }
+        });
+
+        return view;
+    }
+
+    private void setEnableScreen(boolean enableScreen) {
+        binding.userImg.setEnabled(enableScreen);
+        binding.cameraImg.setEnabled(enableScreen);
+        binding.firstnameTxt.setEnabled(enableScreen);
+        binding.lastnameTxt.setEnabled(enableScreen);
+        binding.emailTxt.setEnabled(enableScreen);
+        binding.passwordTxt.setEnabled(enableScreen);
+        binding.confirmpasswordTxt.setEnabled(enableScreen);
+        binding.signupBtn.setEnabled(enableScreen);
+        binding.signinBtn.setEnabled(enableScreen);
     }
 }

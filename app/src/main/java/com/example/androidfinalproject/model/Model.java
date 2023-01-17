@@ -32,7 +32,7 @@ public class Model {
     MutableLiveData<List<Review>> myReviews;
     MutableLiveData<List<Movie>> movieList;
 
-    ModelFirebase modelFirebase;
+    static ModelFirebase modelFirebase;
     private String avatarLocation = "users_avatars/";
     private String movieLocation = "users_movies/";
 
@@ -204,7 +204,7 @@ public class Model {
         modelFirebase.signIn(email, password, listener);
     }
 
-    public String getUserEmail() {
+    public static String getUserEmail() {
         return modelFirebase.getUserEmail();
     }
 
