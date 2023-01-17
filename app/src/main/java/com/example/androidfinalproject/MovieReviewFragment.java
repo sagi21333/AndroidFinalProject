@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,8 +67,7 @@ public class MovieReviewFragment extends Fragment {
         Movie movie = Model.instance.getMovieById(movieId);
 
         adapter = new ReviewRecyclerAdapter(0);
-        binding.listReviewRV.setAdapter(adapter);
-        binding.movieReviewsNameTxt.setText(movie.getTitle());
+
 
         adapter.setOnItemClickListener(new ReviewRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -76,6 +76,9 @@ public class MovieReviewFragment extends Fragment {
                 Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToDisplayReviewFragment2(documentId));
             }
         });
+
+        binding.listReviewRV.setAdapter(adapter);
+        binding.movieReviewsNameTxt.setText(movie.getTitle());
 
         reviewList.setAdapter(adapter);
         Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
@@ -94,6 +97,8 @@ public class MovieReviewFragment extends Fragment {
             Picasso.get()
                     .load(movie.getMovieImageUrl())
                     .into(binding.movieReviewsImg);
+        } else {
+            binding.movieReviewsImg.setImageResource(R.drawable.empty_movie);
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -103,6 +108,14 @@ public class MovieReviewFragment extends Fragment {
         for (String s : movie.getGenres()) {
             binding.movieReviewsGenresTxt.append(s + "  ");
         }
+
+        binding.reviewMovieAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(null,movieId));
+            }
+        });
+
 
         return view;
 

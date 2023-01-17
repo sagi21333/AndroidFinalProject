@@ -16,6 +16,9 @@ public interface ReviewDao {
     @Query("select * from Review where userId = :userId")
     List<Review> getMyReviews(String userId);
 
+    @Query("select * from Review where movieId = :movieId")
+    List<Review> getMovieReview(String movieId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Review ... reviews);
 

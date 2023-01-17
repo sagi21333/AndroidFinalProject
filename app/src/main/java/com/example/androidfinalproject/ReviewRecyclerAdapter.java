@@ -66,6 +66,8 @@ class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
                 Picasso.get()
                         .load(review.getMovieImageUrl())
                         .into(movieImage);
+            } else {
+                movieImage.setImageResource(R.drawable.empty_movie);
             }
 
         }

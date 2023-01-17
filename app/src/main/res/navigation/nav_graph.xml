@@ -93,6 +93,10 @@
         tools:layout="@layout/fragment_set_review" >
         <argument
             android:name="documentId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="movieId"
             app:argType="string" />
     </fragment>
 </navigation>
