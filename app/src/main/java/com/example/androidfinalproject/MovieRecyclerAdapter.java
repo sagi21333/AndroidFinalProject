@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat;
         public int getItemCount() {
             return MovieListViewModel.getData().getValue() == null ? 0 : MovieListViewModel.getData().getValue().size();
         }
+
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
@@ -66,6 +67,8 @@ import java.text.SimpleDateFormat;
                 Picasso.get()
                         .load(movie.getMovieImageUrl())
                         .into(movieImage);
+            } else {
+                movieImage.setImageResource(R.drawable.empty_movie);
             }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

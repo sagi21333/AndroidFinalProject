@@ -67,7 +67,7 @@ public class Review {
         String movieId = (String) json.get("movieId");
         String reviewDesc = (String) json.get("reviewDesc");
         String movieImageUrl = (String) json.get("movieImageUrl");
-        Float movieRate = ((Double) json.get("movieRate")).floatValue();
+        Float movieRate = (float)((Long) json.get("movieRate")).doubleValue();
         Date watchDate = ((Timestamp) json.get("watchDate")).toDate();
         Boolean isDeleted = (Boolean) json.get("isDeleted");
 
