@@ -8,18 +8,21 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.androidfinalproject.databinding.FragmentMovieListBinding;
+import com.example.androidfinalproject.model.Model;
 
 public class MovieListFragment extends Fragment {
 
     FragmentMovieListBinding binding;
     MovieRecyclerAdapter adapter;
     MovieListViewModel viewModel;
+    SwipeRefreshLayout swipeRefresh;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -33,6 +36,9 @@ public class MovieListFragment extends Fragment {
 
         binding = FragmentMovieListBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        swipeRefresh = binding.listMovieSwipeRefresh;
+        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshReviews());
 
         RecyclerView reviewList = binding.listMovieRV;
         reviewList.setHasFixedSize(true);
@@ -51,11 +57,20 @@ public class MovieListFragment extends Fragment {
 
         reviewList.setAdapter(adapter);
 
+        Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+            if (loadingState == Model.LoadingState.loading) {
+                swipeRefresh.setRefreshing(true);
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+
         // Get all the reviews
         viewModel.getData();
 
         return view;
     }
-
-
+    private void refresh() {
+        adapter.notifyDataSetChanged();
+    }
 }

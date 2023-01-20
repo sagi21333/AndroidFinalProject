@@ -7,7 +7,7 @@ import androidx.room.TypeConverters;
 
 import com.example.androidfinalproject.MyApplication;
 
-@Database(entities = {Review.class}, version = 8)
+@Database(entities = {Review.class}, version = 10)
 @TypeConverters({Converters.class})
 abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract ReviewDao reviewDao();
