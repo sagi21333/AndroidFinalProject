@@ -1,64 +1,163 @@
 package com.example.androidfinalproject;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link userDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.androidfinalproject.databinding.FragmentMovieReviewBinding;
+import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
+import com.example.androidfinalproject.model.Model;
+import com.example.androidfinalproject.model.ModelFirebase;
+import com.example.androidfinalproject.model.User;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.util.regex.Pattern;
+
 public class userDetailsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public userDetailsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment userDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static userDetailsFragment newInstance(String param1, String param2) {
-        userDetailsFragment fragment = new userDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    FragmentUserDetailsBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_details, container, false);
+
+        binding = FragmentUserDetailsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        binding.newpasswordBox.setVisibility(View.GONE);
+        binding.confirmnewpasswordBox.setVisibility(View.GONE);
+        binding.cancel.setVisibility(View.GONE);
+        binding.save.setVisibility(View.GONE);
+        binding.cameraBox.setVisibility(View.GONE);
+
+        Model.instance.getUserDetails(new ModelFirebase.GetUserDetailsListener() {
+            @Override
+            public void onComplete(User userDetails) {
+                User myDetails = userDetails;
+                if (!myDetails.getEmail().equals("")) {
+                    binding.emailTxt.setText(myDetails.getEmail());
+                    binding.firstnameTxt.setText(myDetails.getFirstName());
+                    binding.lastnameTxt.setText(myDetails.getLastName());
+                    if (myDetails.getUserImageUrl() != null &&
+                            !myDetails.getUserImageUrl().equals("")) {
+                        Picasso.get().load(myDetails.getUserImageUrl()).into(binding.userImg);
+                    }
+                }
+
+//                setEnableScreen(true); // TODO
+            }
+        });
+
+        binding.detailesEditImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.newpasswordBox.setVisibility(View.VISIBLE);
+                binding.confirmnewpasswordBox.setVisibility(View.VISIBLE);
+                binding.cancel.setVisibility(View.VISIBLE);
+                binding.save.setVisibility(View.VISIBLE);
+                binding.cameraBox.setVisibility(View.VISIBLE);
+
+                binding.detailesEditImg.setVisibility(View.GONE);
+
+                setEnable(true);
+            }
+        });
+
+        binding.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.newpasswordBox.setVisibility(View.GONE);
+                binding.confirmnewpasswordBox.setVisibility(View.GONE);
+                binding.cancel.setVisibility(View.GONE);
+                binding.save.setVisibility(View.GONE);
+                binding.cameraBox.setVisibility(View.GONE);
+
+                binding.detailesEditImg.setVisibility(View.VISIBLE);
+
+                setEnable(false);
+            }
+        });
+
+        binding.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String password = binding.newpasswordTxt.getText().toString();
+                String confirmPassword = binding.confirmnewpasswordTxt.getText().toString();
+                if (! password.equals("") || ! confirmPassword.equals("")) {
+                    if (password.equals(confirmPassword)) {
+                        if (Pattern.compile("^.{0,5}$").matcher(password).matches()) {
+                            Toast.makeText(MyApplication.getContext(), "password is too short (at least 6)", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            Model.updatePassword(password, new ModelFirebase.UpdatePassword() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(MyApplication.getContext(), "User was created successfully", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailed(String failReason) {
+                                    Log.d("My Profile", "Failed updating the password " + failReason);
+                                    Toast.makeText(MyApplication.getContext(), "Failed updating the password", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                        }
+                    } else {
+                        Toast.makeText(MyApplication.getContext(), "Password and Confirm password are different", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                Bitmap bitmap = ((BitmapDrawable) binding.userImg.getDrawable()).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                Model.instance.saveImageAvatar(bitmap, binding.emailTxt.getText().toString(), new ModelFirebase.SaveImageListener() {
+                    @Override
+                    public void onComplete(String url) {
+                        Model.instance.setUserDetails(binding.emailTxt.getText().toString(),
+                                binding.firstnameTxt.getText().toString(),
+                                binding.lastnameTxt.getText().toString(),
+                                url,
+                                new ModelFirebase.RegisterDetails() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(MyApplication.getContext(), "User was updated successfully", Toast.LENGTH_SHORT).show();
+                                        Navigation.findNavController(getView()).popBackStack();
+                                    }
+                                });
+                    }
+                });
+            }
+        });
+
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Profile");
+
+
+        return view;
+    }
+
+    private void setEnable(boolean enableScreen) {
+        binding.firstnameTxt.setEnabled(enableScreen);
+        binding.lastnameTxt.setEnabled(enableScreen);
     }
 }
