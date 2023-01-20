@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,6 +69,7 @@ public class MovieListFragment extends Fragment {
         // Get all the reviews
         viewModel.getData();
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movies");
         return view;
     }
     private void refresh() {

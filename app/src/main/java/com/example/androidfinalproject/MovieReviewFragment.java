@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.NavDirections;
@@ -116,6 +117,7 @@ public class MovieReviewFragment extends Fragment {
             }
         });
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movie reviews");
 
         return view;
 
