@@ -192,7 +192,7 @@ public class Model {
         modelFirebase.register(email, password, listener);
     }
 
-    public void updatePassword(String password, ModelFirebase.UpdatePassword listener) {
+    public static void updatePassword(String password, ModelFirebase.UpdatePassword listener) {
         modelFirebase.updatePassword(password, listener);
     }
 

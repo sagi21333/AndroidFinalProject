@@ -101,7 +101,7 @@ public class registrationFragment extends Fragment {
         binding.signinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(getView()).navigate(R.id.action_registrationFragment_to_loginFragment);
+                Navigation.findNavController(getView()).popBackStack();
             }
         });
 
