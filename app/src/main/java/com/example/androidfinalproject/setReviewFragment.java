@@ -1,64 +1,103 @@
 package com.example.androidfinalproject;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link setReviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.androidfinalproject.databinding.FragmentSetReviewBinding;
+import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
+import com.example.androidfinalproject.model.Review;
+
+import java.io.IOException;
+
 public class setReviewFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    ActivityResultLauncher<Uri> mTakeImage;
+    ActivityResultLauncher<Void> cameraLauncer;
+    Uri movieImageUri;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    ActivityResultLauncher<String> mGetContent;
 
-    public setReviewFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment setReviewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static setReviewFragment newInstance(String param1, String param2) {
-        setReviewFragment fragment = new setReviewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    FragmentSetReviewBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_set_review, container, false);
+
+        binding = FragmentSetReviewBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        binding.openCamera.setOnClickListener(v -> {
+            cameraLauncer.launch(null);
+        });
+        binding.openPhotos.setOnClickListener(v -> {
+            mGetContent.launch("image/*");
+        });
+
+//        binding.post.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Review review = new Review("",Model.getUser)
+//            }
+//        });
+
+        binding.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(getView()).popBackStack();
+            }
+        });
+
+        cameraLauncer = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), new ActivityResultCallback<Bitmap>() {
+            @Override
+            public void onActivityResult(Bitmap result) {
+                if (result != null) {
+                    binding.reviewImg.setImageBitmap(result);
+                }
+            }
+        });
+
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri uri) {
+                // Handle the returned Uri
+                if (uri == null) {
+                    return;
+                }
+
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (bitmap != null) {
+                    binding.reviewImg.setImageBitmap(bitmap);
+                }
+            }
+        });
+
+        mTakeImage = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (result.booleanValue()) {
+                    binding.reviewImg.setImageURI(movieImageUri);
+                }
+            }
+        });
+
+        return view;
     }
 }

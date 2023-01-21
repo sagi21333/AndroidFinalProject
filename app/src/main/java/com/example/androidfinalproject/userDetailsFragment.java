@@ -2,8 +2,12 @@ package com.example.androidfinalproject;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -33,6 +37,10 @@ import java.util.regex.Pattern;
 
 public class userDetailsFragment extends Fragment {
 
+    ActivityResultLauncher<Uri> mTakeImage;
+    ActivityResultLauncher<Void> cameraLauncer;
+    Uri movieImageUri;
+
     FragmentUserDetailsBinding binding;
 
     @Override
@@ -41,6 +49,10 @@ public class userDetailsFragment extends Fragment {
 
         binding = FragmentUserDetailsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        binding.openCamera.setOnClickListener(v -> {
+            cameraLauncer.launch(null);
+        });
 
         binding.newpasswordBox.setVisibility(View.GONE);
         binding.confirmnewpasswordBox.setVisibility(View.GONE);
@@ -146,6 +158,24 @@ public class userDetailsFragment extends Fragment {
                                 });
                     }
                 });
+            }
+        });
+
+        cameraLauncer = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), new ActivityResultCallback<Bitmap>() {
+            @Override
+            public void onActivityResult(Bitmap result) {
+                if (result != null) {
+                    binding.userImg.setImageBitmap(result);
+                }
+            }
+        });
+
+        mTakeImage = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (result.booleanValue()) {
+                    binding.userImg.setImageURI(movieImageUri);
+                }
             }
         });
 

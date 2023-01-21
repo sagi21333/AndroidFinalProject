@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidfinalproject.databinding.FragmentLoginBinding;
+import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
 import com.example.androidfinalproject.model.Model;
 import com.example.androidfinalproject.model.ModelFirebase;
 
@@ -26,16 +28,18 @@ public class loginFragment extends Fragment {
     Button confirmBtn;
     TextView toRegister;
 
+    FragmentLoginBinding binding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        email = (EditText) view.findViewById(R.id.login_username_edittxt);
-        password = (EditText) view.findViewById(R.id.login_password_edittxt);
-        confirmBtn = view.findViewById(R.id.login_login_btn);
-        toRegister = view.findViewById(R.id.login_signup_txtview);
+        email = binding.emailTxt;
+        password = binding.passwordTxt;
+        confirmBtn = binding.login;
+        toRegister = binding.signup;
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -108,7 +108,9 @@ public class registrationFragment extends Fragment {
         cameraLauncer = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), new ActivityResultCallback<Bitmap>() {
             @Override
             public void onActivityResult(Bitmap result) {
-                binding.userImg.setImageBitmap(result);
+                if (result != null) {
+                    binding.userImg.setImageBitmap(result);
+                }
             }
         });
 
