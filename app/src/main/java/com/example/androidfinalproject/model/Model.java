@@ -26,13 +26,13 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Model {
-    public static final Model instance = new Model();
+    private static final Model instance = new Model();
     Executor executor = Executors.newFixedThreadPool(1);
     MutableLiveData<List<Review>> reviewList;
     MutableLiveData<List<Review>> myReviews;
     MutableLiveData<List<Movie>> movieList;
 
-    static ModelFirebase modelFirebase;
+    ModelFirebase modelFirebase;
     private String avatarLocation = "users_avatars/";
     private String movieLocation = "users_movies/";
 
@@ -44,6 +44,10 @@ public class Model {
         movieList = new MutableLiveData<List<Movie>>();
         modelFirebase = new ModelFirebase();
         loadingState.setValue(LoadingState.loaded);
+    }
+
+    public static Model instance(){
+        return instance;
     }
 
     public enum LoadingState {
@@ -192,7 +196,7 @@ public class Model {
         modelFirebase.register(email, password, listener);
     }
 
-    public static void updatePassword(String password, ModelFirebase.UpdatePassword listener) {
+    public void updatePassword(String password, ModelFirebase.UpdatePassword listener) {
         modelFirebase.updatePassword(password, listener);
     }
 
@@ -204,7 +208,7 @@ public class Model {
         modelFirebase.signIn(email, password, listener);
     }
 
-    public static String getUserEmail() {
+    public String getUserEmail() {
         return modelFirebase.getUserEmail();
     }
 

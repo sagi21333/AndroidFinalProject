@@ -58,7 +58,7 @@ public class loginFragment extends Fragment {
                     Toast.makeText(MyApplication.getContext(), "password is too short (at least 6)", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Model.instance.signIn(emailString, passwordString, new ModelFirebase.SignIn() {
+                Model.instance().signIn(emailString, passwordString, new ModelFirebase.SignIn() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(MyApplication.getContext(), "Login successfully", Toast.LENGTH_SHORT).show();

@@ -39,7 +39,7 @@ public class MovieListFragment extends Fragment {
         View view = binding.getRoot();
 
         swipeRefresh = binding.listMovieSwipeRefresh;
-        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshReviews());
+        swipeRefresh.setOnRefreshListener(() -> Model.instance().refreshReviews());
 
         RecyclerView reviewList = binding.listMovieRV;
         reviewList.setHasFixedSize(true);
@@ -58,7 +58,7 @@ public class MovieListFragment extends Fragment {
 
         reviewList.setAdapter(adapter);
 
-        Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == Model.LoadingState.loading) {
                 swipeRefresh.setRefreshing(true);
             } else {

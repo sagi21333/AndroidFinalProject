@@ -12,7 +12,7 @@ public class MovieListViewModel extends ViewModel {
     static LiveData<List<Movie>> data;
 
     public MovieListViewModel() {
-        data = Model.instance.getMovies();
+        data = Model.instance().getMovies();
     }
 
     public Movie getMovieByPos(int position) {

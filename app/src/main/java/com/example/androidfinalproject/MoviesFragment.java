@@ -49,7 +49,7 @@ public class MoviesFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(MoviesFragmentDirections.actionMoviesFragmentToUserDetailsFragment());
                 return true;
             case R.id.Logout:
-                Model.instance.logout();
+                Model.instance().logout();
                 Navigation.findNavController(getView()).popBackStack(R.id.loginFragment, true);
                 Navigation.findNavController(getView()).navigate(R.id.loginFragment);
                 return true;

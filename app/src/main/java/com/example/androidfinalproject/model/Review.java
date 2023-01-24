@@ -23,8 +23,6 @@ public class Review {
     String movieId;
     String reviewDesc;
     String movieImageUrl;
-    Float movieRate;
-    Date watchDate;
     Date updateDate;
     Boolean isDeleted;
 
@@ -33,7 +31,6 @@ public class Review {
         this.userId = "";
         this.movieId = "";
         this.movieImageUrl = "";
-        this.movieRate = 1f;
         this.updateDate = new Date();
         this.reviewDesc = "";
         this.isDeleted = false;
@@ -50,14 +47,13 @@ public class Review {
 //        this.isDeleted = false;
 //    }
 
-    public Review(String documentId, String userId, String movieId, String reviewDesc,  String movieImageUrl, float movieRate, Date watchDate, boolean isDeleted) {
+    public Review(String documentId, String userId, String movieId, String reviewDesc,  String movieImageUrl, boolean isDeleted) {
         this.documentId = documentId;
         this.userId = userId;
         this.movieId = movieId;
         this.reviewDesc = reviewDesc;
         this.movieImageUrl = movieImageUrl;
-        this.movieRate = movieRate;
-        this.watchDate = watchDate;
+        this.updateDate = new Date();
         this.isDeleted = isDeleted;
     }
 
@@ -67,11 +63,9 @@ public class Review {
         String movieId = (String) json.get("movieId");
         String reviewDesc = (String) json.get("reviewDesc");
         String movieImageUrl = (String) json.get("movieImageUrl");
-        Float movieRate = (float)((Long) json.get("movieRate")).doubleValue();
-        Date watchDate = ((Timestamp) json.get("watchDate")).toDate();
         Boolean isDeleted = (Boolean) json.get("isDeleted");
 
-        Review review = new Review(documentId, userId, movieId, reviewDesc, movieImageUrl, movieRate,watchDate, isDeleted);
+        Review review = new Review(documentId, userId, movieId, reviewDesc, movieImageUrl, isDeleted);
         return review;
     }
 
@@ -81,7 +75,6 @@ public class Review {
         jsonReview.put("movieId", this.movieId);
         jsonReview.put("reviewDesc", this.reviewDesc);
         jsonReview.put("movieImageUrl", this.movieImageUrl);
-        jsonReview.put("movieRate", this.movieRate);
         jsonReview.put("updateDate", this.updateDate);
         jsonReview.put("isDeleted", this.isDeleted);
 
@@ -129,22 +122,6 @@ public class Review {
 
     public void setMovieImageUrl(String movieImageUrl) {
         this.movieImageUrl = movieImageUrl;
-    }
-
-    public Float getMovieRate() {
-        return movieRate;
-    }
-
-    public void setMovieRate(Float movieRate) {
-        this.movieRate = movieRate;
-    }
-
-    public Date getWatchDate() {
-        return watchDate;
-    }
-
-    public void setWatchDate(Date watchDate) {
-        this.watchDate = watchDate;
     }
 
     public Date getUpdateDate() {

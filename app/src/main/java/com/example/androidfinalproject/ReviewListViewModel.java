@@ -17,7 +17,7 @@ public class ReviewListViewModel extends ViewModel{
 
     public ReviewListViewModel(String movieId) {
         if(movieId != null){
-            data = Model.instance.getReviews();
+            data = Model.instance().getReviews();
             data = Transformations.map(data, reviews -> {
                 List<Review> filteredReviews = new ArrayList<>();
                 for (Review review : reviews) {
@@ -29,7 +29,7 @@ public class ReviewListViewModel extends ViewModel{
             });
             this.movieId = movieId;
         } else {
-            data = Model.instance.getMyReviews();
+            data = Model.instance( ).getMyReviews();
             this.movieId = null;
         }
 

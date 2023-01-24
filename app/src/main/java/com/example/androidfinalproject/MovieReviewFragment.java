@@ -41,6 +41,7 @@ public class MovieReviewFragment extends Fragment {
     ReviewRecyclerAdapter adapter;
     ReviewListViewModel viewModel;
     SwipeRefreshLayout swipeRefresh;
+    String movieId;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -58,14 +59,14 @@ public class MovieReviewFragment extends Fragment {
 
         RecyclerView reviewList = binding.listReviewRV;
         swipeRefresh = view.findViewById(R.id.listReviewSwipeRefresh);
-        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshReviews());
+        swipeRefresh.setOnRefreshListener(() -> Model.instance().refreshReviews());
 
         reviewList.setHasFixedSize(true);
         reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //Get the movie id
-        String movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
-        Movie movie = Model.instance.getMovieById(movieId);
+        movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
+        Movie movie = Model.instance().getMovieById(movieId);
 
         adapter = new ReviewRecyclerAdapter(0);
 
@@ -82,7 +83,7 @@ public class MovieReviewFragment extends Fragment {
         binding.movieReviewsNameTxt.setText(movie.getTitle());
 
         reviewList.setAdapter(adapter);
-        Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == Model.LoadingState.loading) {
                 swipeRefresh.setRefreshing(true);
             } else {
@@ -113,7 +114,7 @@ public class MovieReviewFragment extends Fragment {
         binding.reviewMovieAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(null,movieId));
+                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(movieId));
             }
         });
 

@@ -62,7 +62,7 @@ public class registrationFragment extends Fragment {
             public void onClick(View v) {
                 setEnableScreen(false);
                 String userEmail = binding.emailTxt.getText().toString().toLowerCase(Locale.ROOT);
-                Model.instance.register(userEmail,
+                Model.instance().register(userEmail,
                         binding.passwordTxt.getText().toString(),
                         new ModelFirebase.Register() {
                             @Override
@@ -70,10 +70,10 @@ public class registrationFragment extends Fragment {
                                 Bitmap bitmap = ((BitmapDrawable) binding.userImg.getDrawable()).getBitmap();
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-                                Model.instance.saveImageAvatar(bitmap, userEmail, new ModelFirebase.SaveImageListener() {
+                                Model.instance().saveImageAvatar(bitmap, userEmail, new ModelFirebase.SaveImageListener() {
                                     @Override
                                     public void onComplete(String url) {
-                                        Model.instance.setUserDetails(userEmail,
+                                        Model.instance().setUserDetails(userEmail,
                                                 binding.firstnameTxt.getText().toString(),
                                                 binding.lastnameTxt.getText().toString(),
                                                 url,

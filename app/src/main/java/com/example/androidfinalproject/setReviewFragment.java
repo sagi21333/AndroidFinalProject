@@ -14,10 +14,12 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.androidfinalproject.databinding.FragmentSetReviewBinding;
 import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
 import com.example.androidfinalproject.model.Model;
+import com.example.androidfinalproject.model.ModelFirebase;
 import com.example.androidfinalproject.model.Review;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class setReviewFragment extends Fragment {
     ActivityResultLauncher<Void> cameraLauncer;
     Uri movieImageUri;
 
+    String movieId = "";
     ActivityResultLauncher<String> mGetContent;
 
     FragmentSetReviewBinding binding;
@@ -37,8 +40,11 @@ public class setReviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         binding = FragmentSetReviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
 
         binding.openCamera.setOnClickListener(v -> {
             cameraLauncer.launch(null);
@@ -50,7 +56,15 @@ public class setReviewFragment extends Fragment {
         binding.post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Review review = new Review("", Model.getUserEmail(),"0", "testing", "", 0, new Date(), false);
+                Review review = new Review("", Model.instance().getUserEmail(),movieId, "testing", "", false);
+                Model.instance().setReview(review, "", new ModelFirebase.SetReviewListener() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(MyApplication.getContext(), "Review was successfully created", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(getView()).popBackStack();
+                    };
+
+                });
             }
         });
 

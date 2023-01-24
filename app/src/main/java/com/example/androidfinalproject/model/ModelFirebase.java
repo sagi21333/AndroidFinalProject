@@ -34,7 +34,7 @@ import java.util.SortedMap;
 
 public class ModelFirebase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    static FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public ModelFirebase() {
@@ -181,7 +181,7 @@ public class ModelFirebase {
         return (currentUser != null);
     }
 
-    public static String getUserEmail() {
+    public String getUserEmail() {
         return auth.getCurrentUser().getEmail();
     }
 

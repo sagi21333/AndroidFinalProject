@@ -60,7 +60,7 @@ public class userDetailsFragment extends Fragment {
         binding.save.setVisibility(View.GONE);
         binding.cameraBox.setVisibility(View.GONE);
 
-        Model.instance.getUserDetails(new ModelFirebase.GetUserDetailsListener() {
+        Model.instance().getUserDetails(new ModelFirebase.GetUserDetailsListener() {
             @Override
             public void onComplete(User userDetails) {
                 User myDetails = userDetails;
@@ -119,7 +119,7 @@ public class userDetailsFragment extends Fragment {
                             Toast.makeText(MyApplication.getContext(), "password is too short (at least 6)", Toast.LENGTH_SHORT).show();
                             return;
                         } else {
-                            Model.updatePassword(password, new ModelFirebase.UpdatePassword() {
+                            Model.instance().updatePassword(password, new ModelFirebase.UpdatePassword() {
                                 @Override
                                 public void onSuccess() {
                                     Toast.makeText(MyApplication.getContext(), "User was created successfully", Toast.LENGTH_SHORT).show();
@@ -142,10 +142,10 @@ public class userDetailsFragment extends Fragment {
                 Bitmap bitmap = ((BitmapDrawable) binding.userImg.getDrawable()).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-                Model.instance.saveImageAvatar(bitmap, binding.emailTxt.getText().toString(), new ModelFirebase.SaveImageListener() {
+                Model.instance().saveImageAvatar(bitmap, binding.emailTxt.getText().toString(), new ModelFirebase.SaveImageListener() {
                     @Override
                     public void onComplete(String url) {
-                        Model.instance.setUserDetails(binding.emailTxt.getText().toString(),
+                        Model.instance().setUserDetails(binding.emailTxt.getText().toString(),
                                 binding.firstnameTxt.getText().toString(),
                                 binding.lastnameTxt.getText().toString(),
                                 url,

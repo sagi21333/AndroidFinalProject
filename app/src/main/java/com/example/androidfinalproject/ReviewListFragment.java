@@ -52,7 +52,7 @@ public class ReviewListFragment extends Fragment {
 
         RecyclerView reviewList = binding.listReviewRV;
         swipeRefresh = view.findViewById(R.id.listReviewSwipeRefresh);
-        swipeRefresh.setOnRefreshListener(() -> Model.instance.refreshReviews());
+        swipeRefresh.setOnRefreshListener(() -> Model.instance().refreshReviews());
 
         reviewList.setHasFixedSize(true);
         reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -83,7 +83,7 @@ public class ReviewListFragment extends Fragment {
 
         reviewList.setAdapter(adapter);
 
-        Model.instance.getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
             if (loadingState == Model.LoadingState.loading) {
                 swipeRefresh.setRefreshing(true);
             } else {
