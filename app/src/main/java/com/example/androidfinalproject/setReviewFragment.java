@@ -17,9 +17,11 @@ import android.view.ViewGroup;
 
 import com.example.androidfinalproject.databinding.FragmentSetReviewBinding;
 import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
+import com.example.androidfinalproject.model.Model;
 import com.example.androidfinalproject.model.Review;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class setReviewFragment extends Fragment {
 
@@ -45,12 +47,12 @@ public class setReviewFragment extends Fragment {
             mGetContent.launch("image/*");
         });
 
-//        binding.post.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Review review = new Review("",Model.getUser)
-//            }
-//        });
+        binding.post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Review review = new Review("", Model.getUserEmail(),"0", "testing", "", 0, new Date(), false);
+            }
+        });
 
         binding.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
