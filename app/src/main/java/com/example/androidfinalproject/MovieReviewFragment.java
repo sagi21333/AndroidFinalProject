@@ -24,6 +24,7 @@ import com.example.androidfinalproject.databinding.FragmentMovieReviewBinding;
 import com.example.androidfinalproject.databinding.FragmentReviewListBinding;
 import com.example.androidfinalproject.model.Model;
 import com.example.androidfinalproject.model.Movie;
+import com.example.androidfinalproject.model.MovieModel;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -66,7 +67,7 @@ public class MovieReviewFragment extends Fragment {
 
         //Get the movie id
         movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
-        Movie movie = Model.instance().getMovieById(movieId);
+        Movie movie = MovieModel.instance.getMovieById(movieId);
 
         adapter = new ReviewRecyclerAdapter(0);
 
@@ -105,11 +106,11 @@ public class MovieReviewFragment extends Fragment {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        binding.movieReviewsReleasedateTxt.setText(dateFormat.format(movie.getReleaseDate()));
+        binding.movieReviewsReleasedateTxt.setText(movie.getReleaseDate());
 
-        for (String s : movie.getGenres()) {
-            binding.movieReviewsGenresTxt.append(s + "  ");
-        }
+//        for (String s : movie.getGenres()) {
+//            binding.movieReviewsGenresTxt.append(s + "  ");
+//        }
 
         binding.reviewMovieAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override

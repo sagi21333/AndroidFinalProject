@@ -30,7 +30,7 @@ public class Model {
     Executor executor = Executors.newFixedThreadPool(1);
     MutableLiveData<List<Review>> reviewList;
     MutableLiveData<List<Review>> myReviews;
-    MutableLiveData<List<Movie>> movieList;
+//    MutableLiveData<List<Movie>> movieList;
 
     ModelFirebase modelFirebase;
     private String avatarLocation = "users_avatars/";
@@ -41,7 +41,7 @@ public class Model {
     private Model() {
         reviewList = new MutableLiveData<List<Review>>();
         myReviews = new MutableLiveData<List<Review>>();
-        movieList = new MutableLiveData<List<Movie>>();
+//        movieList = new MutableLiveData<List<Movie>>();
         modelFirebase = new ModelFirebase();
         loadingState.setValue(LoadingState.loaded);
     }
@@ -71,13 +71,13 @@ public class Model {
         return myReviews;
     }
 
-    public LiveData<List<Movie>> getMovies() {
-        if (movieList.getValue() == null) {
-            getAllMovies();
-        }
-
-        return movieList;
-    }
+//    public LiveData<List<Movie>> getMovies() {
+//        if (movieList.getValue() == null) {
+//            getAllMovies();
+//        }
+//
+//        return movieList;
+//    }
 
     public void deleteReview(String reviewKey, ModelFirebase.DeleteReviewListener listener) {
         modelFirebase.deleteReview(reviewKey, () -> {
@@ -100,35 +100,35 @@ public class Model {
         return reviewlistMovie;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public Movie getMovieById(String MovieId) {
-
-        List<Movie> moviesList = movieList.getValue();
-        Movie movie = moviesList.stream().filter(rev -> rev.getMovieId().equals(MovieId)).findFirst().orElse(null);
-        return movie;
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    public Movie getMovieById(String MovieId) {
+//
+//        List<Movie> moviesList = movieList.getValue();
+//        Movie movie = moviesList.stream().filter(rev -> rev.getMovieId().equals(MovieId)).findFirst().orElse(null);
+//        return movie;
+//    }
 
     public MutableLiveData<LoadingState> getLoadingState() {
         return loadingState;
     }
 
-    public void getAllMovies() {
-        loadingState.setValue(LoadingState.loading);
-
-        //Todo: after taking it from api remove the hardcoded array
-        ArrayList<Movie> movies = new ArrayList<Movie>();
-        ArrayList<String> geners = new ArrayList<String>();
-        geners.add("drama");
-        for (int i =0; i<10; i++) {
-            Movie movie = new Movie("" + i, "movie"+i, "bla", geners,new Date (), "");
-            movies.add(movie);
-        }
-
-        //Todo: get all the movies from the api and localdb
-
-        movieList.postValue(movies);
-        loadingState.postValue(LoadingState.loaded);
-    }
+//    public void getAllMovies() {
+//        loadingState.setValue(LoadingState.loading);
+//
+//        //Todo: after taking it from api remove the hardcoded array
+//        ArrayList<Movie> movies = new ArrayList<Movie>();
+//        ArrayList<String> geners = new ArrayList<String>();
+//        geners.add("drama");
+//        for (int i =0; i<10; i++) {
+//            Movie movie = new Movie("" + i, "movie"+i, "bla", geners,new Date (), "");
+//            movies.add(movie);
+//        }
+//
+//        //Todo: get all the movies from the api and localdb
+//
+//        movieList.postValue(movies);
+//        loadingState.postValue(LoadingState.loaded);
+//    }
     public void refreshReviews() {
 
         loadingState.setValue(LoadingState.loading);

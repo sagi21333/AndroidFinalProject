@@ -50,7 +50,7 @@ public class MovieListFragment extends Fragment {
         adapter.setOnItemClickListener(new MovieRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                String movieId = viewModel.getMovieByPos(pos).getMovieId();
+                String movieId = viewModel.getMovieByPos(pos).getId();
                 Navigation.findNavController(view).navigate(MoviesFragmentDirections.actionMoviesFragmentToMovieReviewFragment(movieId));
             }
 

@@ -73,7 +73,7 @@ import java.text.SimpleDateFormat;
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-            movieReleaseDate.setText(dateFormat.format(movie.getReleaseDate()));
+            movieReleaseDate.setText(movie.getReleaseDate());
         }
 
         public MovieViewHolder(@NonNull View view, MovieRecyclerAdapter.OnItemClickListener listener) {

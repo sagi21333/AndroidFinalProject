@@ -5,33 +5,34 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Movie {
     @PrimaryKey
     @NonNull
-    String movieId;
-    String title;
-    String overview;
-    ArrayList<String> genres = new ArrayList<String>(); //Not sure which type is
-    Date releaseDate;
-    String movieImageUrl;
+    private String id;
+    private String title;
+    private String overview;
+    private List<String> genres;
+    private String release_date;
+    private String poster_path;
 
-    public Movie(@NonNull String movieId, String title, String overview, ArrayList<String> genres, Date releaseDate, String movieImageUrl) {
-        this.movieId = movieId;
+    public Movie(@NonNull String id, String title, String overview, ArrayList<String> genres, String releaseDate, String movieImageUrl) {
+        this.id = id;
         this.title = title;
         this.overview = overview;
         this.genres = genres;
-        this.releaseDate = releaseDate;
-        this.movieImageUrl = movieImageUrl;
+        this.release_date = releaseDate;
+        this.poster_path = movieImageUrl;
     }
 
     @NonNull
-    public String getMovieId() {
-        return movieId;
+    public String getId() {
+        return id;
     }
 
-    public void setMovieId(@NonNull String movieId) {
-        this.movieId = movieId;
+    public void setId(@NonNull String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -50,27 +51,27 @@ public class Movie {
         this.overview = overview;
     }
 
-    public ArrayList<String> getGenres() {
+    public List<String> getGenres() {
         return genres;
     }
 
-    public void setGenres(ArrayList<String> genres) {
+    public void setGenres(List<String> genres) {
         this.genres = genres;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public String getReleaseDate() {
+        return release_date;
     }
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setReleaseDate(String releaseDate) {
+        this.release_date = releaseDate;
     }
 
     public String getMovieImageUrl() {
-        return movieImageUrl;
+        return poster_path;
     }
 
     public void setMovieImageUrl(String movieImageUrl) {
-        this.movieImageUrl = movieImageUrl;
+        this.poster_path = movieImageUrl;
     }
 }
