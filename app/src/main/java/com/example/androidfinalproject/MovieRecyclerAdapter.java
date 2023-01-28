@@ -1,5 +1,6 @@
 package com.example.androidfinalproject;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +14,30 @@ import com.example.androidfinalproject.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 
-
-    class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
+class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         OnItemClickListener listener;
-        public static interface OnItemClickListener{
+
+        List<Movie> data;
+
+        public void setData(List<Movie> data){
+            this.data = data;
+            notifyDataSetChanged();
+            Log.d("TAG", data.get(0).getTitle());
+        }
+
+
+    public static interface OnItemClickListener{
             void onItemClick(int pos);
         }
 
         LayoutInflater inflater;
 
-        public MovieRecyclerAdapter(){
+        public MovieRecyclerAdapter(LayoutInflater inflater, List<Movie> data){
             this.inflater = inflater;
+            this.data = data;
         }
 
         void setOnItemClickListener(OnItemClickListener listener){
@@ -35,20 +47,21 @@ import java.text.SimpleDateFormat;
         @Override
         public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_movie_row, parent, false);
-            MovieViewHolder viewHolder = new MovieViewHolder(view, listener);
+            MovieViewHolder viewHolder = new MovieViewHolder(view, listener, data);
             return viewHolder;
         }
 
         @Override
         public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-            Movie movie = MovieListViewModel.getData().getValue().get(position);
+            Movie movie = data.get(position);
 
             holder.bind(movie);
         }
 
         @Override
         public int getItemCount() {
-            return MovieListViewModel.getData().getValue() == null ? 0 : MovieListViewModel.getData().getValue().size();
+            if(data == null)return 0;
+            return data.size();
         }
 
     }
@@ -58,6 +71,8 @@ import java.text.SimpleDateFormat;
         ImageView movieImage;
         TextView movieReleaseDate;
         ImageView movieButton;
+
+        List<Movie> data;
 
         void bind(Movie movie) {
             movieName.setText(movie.getTitle());
@@ -76,8 +91,9 @@ import java.text.SimpleDateFormat;
             movieReleaseDate.setText(movie.getReleaseDate());
         }
 
-        public MovieViewHolder(@NonNull View view, MovieRecyclerAdapter.OnItemClickListener listener) {
+        public MovieViewHolder(@NonNull View view, MovieRecyclerAdapter.OnItemClickListener listener, List<Movie> data) {
             super(view);
+            this.data = data;
             movieName = view.findViewById(R.id.movie_name_txtview);
             movieImage = view.findViewById(R.id.movie_img);
             movieReleaseDate = view.findViewById(R.id.movie_releasedate_txtview);

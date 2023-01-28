@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,18 +18,23 @@ import android.view.ViewGroup;
 
 import com.example.androidfinalproject.databinding.FragmentMovieListBinding;
 import com.example.androidfinalproject.model.Model;
+import com.example.androidfinalproject.model.Movie;
+import com.example.androidfinalproject.model.MovieModel;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class MovieListFragment extends Fragment {
 
     FragmentMovieListBinding binding;
     MovieRecyclerAdapter adapter;
-    MovieListViewModel viewModel;
+    List<Movie> data = new LinkedList<>();
     SwipeRefreshLayout swipeRefresh;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new MovieListViewModel();
+
     }
 
     @Override
@@ -39,35 +45,38 @@ public class MovieListFragment extends Fragment {
         View view = binding.getRoot();
 
         swipeRefresh = binding.listMovieSwipeRefresh;
-        swipeRefresh.setOnRefreshListener(() -> Model.instance().refreshReviews());
+        swipeRefresh.setOnRefreshListener(() -> MovieModel.instance.refreshMovies());
 
-        RecyclerView reviewList = binding.listMovieRV;
-        reviewList.setHasFixedSize(true);
-        reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new MovieRecyclerAdapter();
+        RecyclerView movieList = binding.listMovieRV;
+        movieList.setHasFixedSize(true);
+        movieList.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MovieRecyclerAdapter(getLayoutInflater(),data);
         binding.listMovieRV.setAdapter(adapter);
+
+        LiveData<List<Movie>> movies = MovieModel.instance.loadMovies();
+        movies.observe(getViewLifecycleOwner(),list->{
+            adapter.setData(list);
+        });
+
 
         adapter.setOnItemClickListener(new MovieRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                String movieId = viewModel.getMovieByPos(pos).getId();
+                String movieId = movies.getValue().get(pos).getId();
                 Navigation.findNavController(view).navigate(MoviesFragmentDirections.actionMoviesFragmentToMovieReviewFragment(movieId));
             }
 
         });
 
-        reviewList.setAdapter(adapter);
+        movieList.setAdapter(adapter);
 
-        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
-            if (loadingState == Model.LoadingState.loading) {
-                swipeRefresh.setRefreshing(true);
-            } else {
-                swipeRefresh.setRefreshing(false);
-            }
-        });
-
-        // Get all the reviews
-        viewModel.getData();
+//        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+//            if (loadingState == Model.LoadingState.loading) {
+//                swipeRefresh.setRefreshing(true);
+//            } else {
+//                swipeRefresh.setRefreshing(false);
+//            }
+//        });
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movies");
         return view;

@@ -18,13 +18,11 @@ import com.google.gson.GsonBuilder;
 
 public class MovieModel {
     final public static MovieModel instance = new MovieModel();
-    static MutableLiveData<List<Movie>> movieList;
+    MutableLiveData<List<Movie>> data = new MutableLiveData<List<Movie>>();
 
     final String BASE_URL = "https://api.themoviedb.org/3/";
     Retrofit retrofit;
     MovieApi movieApi;
-
-    MutableLiveData<Model.LoadingState> loadingState = new MutableLiveData<>();
 
     private MovieModel() {
         Gson gson = new GsonBuilder()
@@ -36,88 +34,47 @@ public class MovieModel {
                 .build();
         movieApi = retrofit.create(MovieApi.class);
 
-        movieList = new MutableLiveData<List<Movie>>();
-        loadingState.setValue(Model.LoadingState.loaded);
     }
 
-//    public LiveData<List<Movie>> getMovies() {
-//        MutableLiveData<List<Movie>> data = new MutableLiveData<>();
-//        Call<MoviesResponse> call = movieApi.getPopularMovies("f314f0faba46f8dfcb54ae84d8f584a2", "en-US", 1);
-//
-//        call.enqueue(new Callback<MoviesResponse>() {
-//            @Override
-//            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
-//                if (response.isSuccessful()) {
-//                    MoviesResponse res = response.body();
-//                    data.setValue(res.getResults());
-//                } else {
-//                    Log.d("TAG", "----- searchMoviesByTitle response error");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MoviesResponse> call, Throwable t) {
-//                Log.d("TAG", "----- searchMoviesByTitle fail");
-//            }
-//        });
-//        return data;
-//    }
 
     public Movie getMovieById(String MovieId) {
 
-        LiveData<List<Movie>> moviesList = MovieModel.movieList;
-        Movie movie = moviesList.getValue().stream().filter(rev -> rev.getId().equals(MovieId)).findFirst().orElse(null);
+        Movie movie = data.getValue().stream().filter(rev -> rev.getId().equals(MovieId)).findFirst().orElse(null);
         return movie;
     }
 
-//    public Movie getMovieById(String movieId) {
-//        final MutableLiveData<Movie> movie = new MutableLiveData<>();
-//        movieApi.getMovieById("f314f0faba46f8dfcb54ae84d8f584a2", movieId,"en-US").enqueue(new Callback<Movie>() {
-//            @Override
-//            public void onResponse(Call<Movie> call, Response<Movie> response) {
-//                if (response.isSuccessful()) {
-//                    movie.setValue(response.body());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Movie> call, Throwable t) {
-//                Log.d("TAG", "----- getMovieById fail");
-//            }
-//        });
-//        return movie.getValue();
-//    }
-
-
-
     public LiveData<List<Movie>> loadMovies() {
-        loadingState.setValue(Model.LoadingState.loading);
+        Model.instance().loadingState.setValue(Model.LoadingState.loading);
 
-        MutableLiveData<List<Movie>> data = new MutableLiveData<>();
-        movieApi.getPopularMovies("f314f0faba46f8dfcb54ae84d8f584a2", "en-US", 1).enqueue(new Callback<MoviesResponse>() {
+        Call<MoviesResponse> call = movieApi.getPopularMovies("f314f0faba46f8dfcb54ae84d8f584a2", "en-US", 1);
+        call.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful()){
+                    Log.d("tag", response.body().toString());
                     MoviesResponse res = response.body();
                     data.setValue(res.getResults());
-                    movieList.postValue(res.getResults());
 
-                } else {
-                    Log.d("TAG", "----- searchMoviesByTitle response error");
+                }else{
+                    Log.d("TAG","----- searchMoviesByTitle response error");
                 }
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                Log.d("TAG", "----- searchMoviesByTitle fail");
+                Log.d("TAG","----- searchMoviesByTitle fail");
             }
         });
 
-
-        loadingState.postValue(Model.LoadingState.loaded);
+        Model.instance().loadingState.postValue(Model.LoadingState.loaded);
 
         return data;
     }
+
+    public void refreshMovies() {
+        loadMovies();
+    }
+
 }
 
 
