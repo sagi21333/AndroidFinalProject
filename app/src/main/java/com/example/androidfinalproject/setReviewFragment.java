@@ -1,6 +1,7 @@
 package com.example.androidfinalproject;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,7 +22,10 @@ import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
 import com.example.androidfinalproject.model.Model;
 import com.example.androidfinalproject.model.ModelFirebase;
 import com.example.androidfinalproject.model.Review;
+import com.example.androidfinalproject.model.User;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
@@ -32,6 +36,8 @@ public class setReviewFragment extends Fragment {
     Uri movieImageUri;
 
     String movieId = "";
+    String documentId = null;
+    Boolean isEsit;
     ActivityResultLauncher<String> mGetContent;
 
     FragmentSetReviewBinding binding;
@@ -39,12 +45,26 @@ public class setReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         binding = FragmentSetReviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
+        movieId = setReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
+        documentId = setReviewFragmentArgs.fromBundle(getArguments()).getDocumentId();
+        isEsit = setReviewFragmentArgs.fromBundle(getArguments()).getIsEdit();
+
+        if (documentId != null) {
+            if (!isEsit) {
+                binding.post.setVisibility(View.GONE);
+                binding.cancel.setVisibility(View.GONE);
+                binding.openPhotos.setVisibility(View.GONE);
+                binding.openCamera.setVisibility(View.GONE);
+                binding.review.setFocusable(false);
+            }
+
+            Review review = Model.instance().getReviewById(documentId);
+            binding.review.setText(review.getReviewDesc());
+            Picasso.get().load(review.getMovieImageUrl()).into(binding.reviewImg);
+        }
 
         binding.openCamera.setOnClickListener(v -> {
             cameraLauncer.launch(null);
@@ -56,14 +76,25 @@ public class setReviewFragment extends Fragment {
         binding.post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Review review = new Review("", Model.instance().getUserEmail(),movieId, "testing", "", false);
-                Model.instance().setReview(review, "", new ModelFirebase.SetReviewListener() {
-                    @Override
-                    public void onComplete() {
-                        Toast.makeText(MyApplication.getContext(), "Review was successfully created", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(getView()).popBackStack();
-                    };
+                Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                Review review = new Review("", Model.instance().getUserEmail(), movieId, binding.review.getText().toString(), "", false);
 
+                Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + movieId, new ModelFirebase.SaveImageListener() {
+                    @Override
+                    public void onComplete(String url) {
+                        review.setMovieImageUrl(url);
+
+                        Model.instance().setReview(review, "", new ModelFirebase.SetReviewListener() {
+                            @Override
+                            public void onComplete() {
+                                Toast.makeText(MyApplication.getContext(), "Review was successfully created", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(getView()).popBackStack();
+                            };
+
+                        });
+                    }
                 });
             }
         });

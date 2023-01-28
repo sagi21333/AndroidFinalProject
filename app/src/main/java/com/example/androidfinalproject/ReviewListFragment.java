@@ -27,6 +27,7 @@ public class ReviewListFragment extends Fragment {
     int visibility;
     SwipeRefreshLayout swipeRefresh;
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -71,11 +72,12 @@ public class ReviewListFragment extends Fragment {
             @Override
             public void onItemClick(int pos) {
                 String documentId = viewModel.getReviewByPos(pos).getDocumentId();
+                String movieId = viewModel.getReviewByPos(pos).getMovieId();
 
                 if (parentFragment instanceof MovieReviewFragment) {
-                    Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToDisplayReviewFragment2(documentId));
+                    Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(movieId, documentId, false));
                 } else if (parentFragment instanceof myReviewsFragment) {
-                    Navigation.findNavController(view).navigate(myReviewsFragmentDirections.actionMyReviewsFragmentToDisplayReviewFragment(documentId));
+                    Navigation.findNavController(view).navigate(myReviewsFragmentDirections.actionMyReviewsFragmentToSetReviewFragment(movieId, documentId, true));
                 }
             }
 

@@ -32,12 +32,6 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 
 public class MovieReviewFragment extends Fragment {
-
-//    ImageView movieImg;
-//    TextView name;
-//    TextView director;
-//    TextView releasedate;
-
     FragmentMovieReviewBinding binding;
     ReviewRecyclerAdapter adapter;
     ReviewListViewModel viewModel;
@@ -76,7 +70,7 @@ public class MovieReviewFragment extends Fragment {
             @Override
             public void onItemClick(int pos) {
                 String documentId = viewModel.getReviewByPos(pos).getDocumentId();
-                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToDisplayReviewFragment2(documentId));
+                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(movieId, documentId, false));
             }
         });
 
@@ -115,7 +109,7 @@ public class MovieReviewFragment extends Fragment {
         binding.reviewMovieAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(movieId));
+                Navigation.findNavController(view).navigate(MovieReviewFragmentDirections.actionMovieReviewFragmentToSetReviewFragment(movieId, null, false));
             }
         });
 
