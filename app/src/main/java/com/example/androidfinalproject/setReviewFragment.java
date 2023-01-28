@@ -48,6 +48,8 @@ public class setReviewFragment extends Fragment {
         binding = FragmentSetReviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        binding.delete.setVisibility(View.GONE);
+
         movieId = setReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
         documentId = setReviewFragmentArgs.fromBundle(getArguments()).getDocumentId();
         isEsit = setReviewFragmentArgs.fromBundle(getArguments()).getIsEdit();
@@ -59,6 +61,8 @@ public class setReviewFragment extends Fragment {
                 binding.openPhotos.setVisibility(View.GONE);
                 binding.openCamera.setVisibility(View.GONE);
                 binding.review.setFocusable(false);
+            } else {
+                binding.delete.setVisibility(View.VISIBLE);
             }
 
             Review review = Model.instance().getReviewById(documentId);
@@ -103,6 +107,19 @@ public class setReviewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(getView()).popBackStack();
+            }
+        });
+
+        binding.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Model.instance().deleteReview(documentId, new ModelFirebase.DeleteReviewListener() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(MyApplication.getContext(), "Review was successfully deleted", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(getView()).popBackStack();
+                    }
+                });
             }
         });
 
