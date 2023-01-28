@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class registrationFragment extends Fragment {
 
@@ -43,6 +45,8 @@ public class registrationFragment extends Fragment {
     Uri movieImageUri;
 
     FragmentRegistrationBinding binding;
+
+    Boolean setImg = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,10 +64,41 @@ public class registrationFragment extends Fragment {
         binding.signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEnableScreen(false);
                 String userEmail = binding.emailTxt.getText().toString().toLowerCase(Locale.ROOT);
+
+                if (userEmail.equals("")) {
+                    Toast.makeText(MyApplication.getContext(), "Email is required", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (!Pattern.compile("^(.+)@(\\S+)$").matcher(userEmail).matches()) {
+                    Toast.makeText(MyApplication.getContext(), "Bad email type", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String password = binding.passwordTxt.getText().toString();
+                String confirmPassword = binding.confirmpasswordTxt.getText().toString();
+                if (! password.equals("")) {
+                    if (password.equals(confirmPassword)) {
+                        if (Pattern.compile("^.{0,5}$").matcher(password).matches()) {
+                            Toast.makeText(MyApplication.getContext(), "password is too short (at least 6)", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } else {
+                        Toast.makeText(MyApplication.getContext(), "Password and Confirm password are different", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else {
+                    Toast.makeText(MyApplication.getContext(), "Password is empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!setImg) {
+                    Toast.makeText(MyApplication.getContext(), "You have to set an image", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                setEnableScreen(false);
                 Model.instance().register(userEmail,
-                        binding.passwordTxt.getText().toString(),
+                        password,
                         new ModelFirebase.Register() {
                             @Override
                             public void onSuccess() {
@@ -110,6 +145,7 @@ public class registrationFragment extends Fragment {
             public void onActivityResult(Bitmap result) {
                 if (result != null) {
                     binding.userImg.setImageBitmap(result);
+                    setImg = true;
                 }
             }
         });

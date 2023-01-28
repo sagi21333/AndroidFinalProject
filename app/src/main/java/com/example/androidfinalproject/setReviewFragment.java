@@ -42,6 +42,8 @@ public class setReviewFragment extends Fragment {
 
     FragmentSetReviewBinding binding;
 
+    Boolean setImg = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class setReviewFragment extends Fragment {
             Review review = Model.instance().getReviewById(documentId);
             binding.review.setText(review.getReviewDesc());
             Picasso.get().load(review.getMovieImageUrl()).into(binding.reviewImg);
+            setImg = true;
         }
 
         binding.openCamera.setOnClickListener(v -> {
@@ -80,6 +83,16 @@ public class setReviewFragment extends Fragment {
         binding.post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!setImg) {
+                    Toast.makeText(MyApplication.getContext(), "You have to set an image", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (binding.review.getText().toString().equals("")) {
+                    Toast.makeText(MyApplication.getContext(), "You have to write a review", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
@@ -128,6 +141,7 @@ public class setReviewFragment extends Fragment {
             public void onActivityResult(Bitmap result) {
                 if (result != null) {
                     binding.reviewImg.setImageBitmap(result);
+                    setImg = true;
                 }
             }
         });
@@ -149,6 +163,7 @@ public class setReviewFragment extends Fragment {
 
                 if (bitmap != null) {
                     binding.reviewImg.setImageBitmap(bitmap);
+                    setImg = true;
                 }
             }
         });
