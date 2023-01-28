@@ -70,13 +70,13 @@ public class MovieListFragment extends Fragment {
 
         movieList.setAdapter(adapter);
 
-//        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
-//            if (loadingState == Model.LoadingState.loading) {
-//                swipeRefresh.setRefreshing(true);
-//            } else {
-//                swipeRefresh.setRefreshing(false);
-//            }
-//        });
+        Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
+            if (loadingState == Model.LoadingState.loading) {
+                swipeRefresh.setRefreshing(true);
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movies");
         return view;
