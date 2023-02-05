@@ -80,7 +80,7 @@ class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
             if (movie.getMovieImageUrl() != null &&
                     !movie.getMovieImageUrl().equals("")) {
                 Picasso.get()
-                        .load(movie.getMovieImageUrl())
+                        .load("https://image.tmdb.org/t/p/w500"+movie.getMovieImageUrl())
                         .into(movieImage);
             } else {
                 movieImage.setImageResource(R.drawable.empty_movie);

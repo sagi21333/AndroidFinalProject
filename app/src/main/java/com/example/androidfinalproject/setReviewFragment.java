@@ -21,6 +21,8 @@ import com.example.androidfinalproject.databinding.FragmentSetReviewBinding;
 import com.example.androidfinalproject.databinding.FragmentUserDetailsBinding;
 import com.example.androidfinalproject.model.Model;
 import com.example.androidfinalproject.model.ModelFirebase;
+import com.example.androidfinalproject.model.Movie;
+import com.example.androidfinalproject.model.MovieModel;
 import com.example.androidfinalproject.model.Review;
 import com.example.androidfinalproject.model.User;
 import com.squareup.picasso.Picasso;
@@ -72,6 +74,12 @@ public class setReviewFragment extends Fragment {
             Picasso.get().load(review.getMovieImageUrl()).into(binding.reviewImg);
             setImg = true;
         }
+
+        Movie movie = MovieModel.instance.getMovieById(movieId);
+
+        binding.movieName.setText(movie.getTitle());
+        binding.ganres.setText(movie.getGenres().toString());
+        binding.release.setText(movie.getReleaseDate());
 
         binding.openCamera.setOnClickListener(v -> {
             cameraLauncer.launch(null);
