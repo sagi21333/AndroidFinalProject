@@ -76,6 +76,7 @@ public class MovieReviewFragment extends Fragment {
 
         binding.listReviewRV.setAdapter(adapter);
         binding.movieReviewsNameTxt.setText(movie.getTitle());
+        binding.movieReviewsGenresTxt.setText(movie.getMovieVoteAverage());
 
         reviewList.setAdapter(adapter);
         Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {

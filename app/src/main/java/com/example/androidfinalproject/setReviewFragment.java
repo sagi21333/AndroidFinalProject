@@ -78,7 +78,7 @@ public class setReviewFragment extends Fragment {
         Movie movie = MovieModel.instance.getMovieById(movieId);
 
         binding.movieName.setText(movie.getTitle());
-        binding.ganres.setText(movie.getGenres().toString());
+        binding.imdbRating.setText(movie.getMovieVoteAverage());
         binding.release.setText(movie.getReleaseDate());
 
         binding.openCamera.setOnClickListener(v -> {

@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@+id/movie_name" />
 
     <TextView
-        android:id="@+id/ganres"
+        android:id="@+id/imdb_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"

@@ -71,6 +71,7 @@ class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         ImageView movieImage;
         TextView movieReleaseDate;
         ImageView movieButton;
+        TextView movieRating;
 
         List<Movie> data;
 
@@ -89,6 +90,8 @@ class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
             movieReleaseDate.setText(movie.getReleaseDate());
+
+            movieRating.setText(movie.getMovieVoteAverage());
         }
 
         public MovieViewHolder(@NonNull View view, MovieRecyclerAdapter.OnItemClickListener listener, List<Movie> data) {
@@ -97,6 +100,7 @@ class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieViewHolder> {
             movieName = view.findViewById(R.id.movie_name_txtview);
             movieImage = view.findViewById(R.id.movie_img);
             movieReleaseDate = view.findViewById(R.id.movie_releasedate_txtview);
+            movieRating = view.findViewById(R.id.imdb_rating);
             movieButton = view.findViewById(R.id.movie_button_img);
 
 

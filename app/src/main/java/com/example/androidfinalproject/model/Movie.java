@@ -12,18 +12,16 @@ public class Movie {
     @NonNull
     private String id;
     private String title;
-    private String overview;
-    private List<String> genres;
     private String release_date;
     private String poster_path;
+    private String vote_average;
 
-    public Movie(@NonNull String id, String title, String overview, ArrayList<String> genres, String releaseDate, String movieImageUrl) {
+    public Movie(@NonNull String id, String title, String releaseDate, String movieImageUrl, String voteAverage) {
         this.id = id;
         this.title = title;
-        this.overview = overview;
-        this.genres = genres;
         this.release_date = releaseDate;
         this.poster_path = movieImageUrl;
+        this.vote_average = voteAverage;
     }
 
     @NonNull
@@ -43,22 +41,6 @@ public class Movie {
         this.title = title;
     }
 
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public List<String> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
-    }
-
     public String getReleaseDate() {
         return release_date;
     }
@@ -73,5 +55,13 @@ public class Movie {
 
     public void setMovieImageUrl(String movieImageUrl) {
         this.poster_path = movieImageUrl;
+    }
+
+    public String getMovieVoteAverage() {
+        return vote_average;
+    }
+
+    public void setMovieVoteAverage(String voteAverage) {
+        this.vote_average = voteAverage;
     }
 }
