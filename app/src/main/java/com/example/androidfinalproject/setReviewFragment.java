@@ -72,7 +72,6 @@ public class setReviewFragment extends Fragment {
             Review review = Model.instance().getReviewById(documentId);
             binding.review.setText(review.getReviewDesc());
             Picasso.get().load(review.getMovieImageUrl()).into(binding.reviewImg);
-            setImg = true;
         }
 
         Movie movie = MovieModel.instance.getMovieById(movieId);
@@ -89,98 +88,65 @@ public class setReviewFragment extends Fragment {
         });
 
         binding.post.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (documentId != null) {
-//                    if (!setImg) {
-//                        Toast.makeText(MyApplication.getContext(), "You have to set an image", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//
-//                    if (binding.review.getText().toString().equals("")) {
-//                        Toast.makeText(MyApplication.getContext(), "You have to write a review", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//
-//                    Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-//                    Review review = new Review("", Model.instance().getUserEmail(), movieId, binding.review.getText().toString(), "", false);
-//
-//                    Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + review.getDocumentId() + movieId, new ModelFirebase.SaveImageListener() {
-//                        @Override
-//                        public void onComplete(String url) {
-//                            review.setMovieImageUrl(url);
-//
-//                            Model.instance().setReview(review, "", new ModelFirebase.SetReviewListener() {
-//                                @Override
-//                                public void onComplete() {
-//                                    Toast.makeText(MyApplication.getContext(), "Review was successfully created", Toast.LENGTH_SHORT).show();
-//                                    Navigation.findNavController(getView()).popBackStack();
-//                                };
-//
-//                            });
-//                        }
-//                    });
-//                } else {
-//                    // If there is documentId then we only need to change the current review
-//                    Review review = Model.instance().getReviewById(documentId);
-//                    review.setReviewDesc(binding.review.getText().toString());
-//
-//                    if (setImg) {
-//                        Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-//
-//                        Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + review.getDocumentId() + movieId, new ModelFirebase.SaveImageListener() {
-//                            @Override
-//                            public void onComplete(String url) {
-//                                review.setMovieImageUrl(url);
-//                            }
-//                        });
-//                    }
-//
-//                    Model.instance().setReview(review, documentId, new ModelFirebase.SetReviewListener() {
-//                        @Override
-//                        public void onComplete() {
-//                            Toast.makeText(MyApplication.getContext(), "Review was successfully updated", Toast.LENGTH_SHORT).show();
-//                            Navigation.findNavController(getView()).popBackStack();
-//                        }
-//                    });
-//                }
-//            }
             @Override
             public void onClick(View view) {
-                if (!setImg) {
-                    Toast.makeText(MyApplication.getContext(), "You have to set an image", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                if (documentId == null) {
+                    if (!setImg) {
+                        Toast.makeText(MyApplication.getContext(), "You have to set an image", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                if (binding.review.getText().toString().equals("")) {
-                    Toast.makeText(MyApplication.getContext(), "You have to write a review", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    if (binding.review.getText().toString().equals("")) {
+                        Toast.makeText(MyApplication.getContext(), "You have to write a review", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-                Review review = new Review("", Model.instance().getUserEmail(), movieId, binding.review.getText().toString(), "", false);
+                    Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                    Review review = new Review("", Model.instance().getUserEmail(), movieId, binding.review.getText().toString(), "", false);
 
-                Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + movieId, new ModelFirebase.SaveImageListener() {
-                    @Override
-                    public void onComplete(String url) {
-                        review.setMovieImageUrl(url);
+                    Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + review.getDocumentId() + movieId, new ModelFirebase.SaveImageListener() {
+                        @Override
+                        public void onComplete(String url) {
+                            review.setMovieImageUrl(url);
 
-                        Model.instance().setReview(review, "", new ModelFirebase.SetReviewListener() {
+                            Model.instance().setReview(review, "", new ModelFirebase.SetReviewListener() {
+                                @Override
+                                public void onComplete() {
+                                    Toast.makeText(MyApplication.getContext(), "Review was successfully created", Toast.LENGTH_SHORT).show();
+                                    Navigation.findNavController(getView()).popBackStack();
+                                };
+
+                            });
+                        }
+                    });
+                } else {
+                    // If there is documentId then we only need to change the current review
+                    Review review = Model.instance().getReviewById(documentId);
+                    review.setReviewDesc(binding.review.getText().toString());
+
+                    if (setImg) {
+                        Bitmap bitmap = ((BitmapDrawable) binding.reviewImg.getDrawable()).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+
+                        Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + review.getDocumentId() + movieId, new ModelFirebase.SaveImageListener() {
                             @Override
-                            public void onComplete() {
-                                Toast.makeText(MyApplication.getContext(), "Review was successfully created", Toast.LENGTH_SHORT).show();
-                                Navigation.findNavController(getView()).popBackStack();
-                            };
-
+                            public void onComplete(String url) {
+                                review.setMovieImageUrl(url);
+                            }
                         });
                     }
-                });
+
+                    Model.instance().setReview(review, documentId, new ModelFirebase.SetReviewListener() {
+                        @Override
+                        public void onComplete() {
+                            Toast.makeText(MyApplication.getContext(), "Review was successfully updated", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(getView()).popBackStack();
+                        }
+                    });
+                }
             }
         });
 
