@@ -6,26 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".MovieReviewFragment">
 
-    
+
     <ImageView
         android:id="@+id/movie_reviews_img"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/avatarimage"
+        tools:srcCompat="@drawable/avatarimage" />
 
     <TextView
         android:id="@+id/movie_reviews_name_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:text="movie name"
-        android:textSize="24sp"
+        android:gravity="center_vertical"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeMaxTextSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/movie_reviews_img"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,17 +40,17 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:text="Genres:"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_reviews_name_txt" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <TextView
         android:id="@+id/movie_reviews_genres_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:text=""
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView11"
@@ -57,25 +63,27 @@
         android:layout_width="101dp"
         android:layout_height="24dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="59dp"
         android:text="Release Date:"
+        android:gravity="center_vertical"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/listReviewSwipeRefresh"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/movie_reviews_name_txt"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/movie_reviews_releasedate_txt"
         android:layout_width="121dp"
         android:layout_height="22dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="5dp"
         android:text="04/05/1997"
+        android:gravity="center_vertical"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/listReviewSwipeRefresh"
+        app:layout_constraintBottom_toBottomOf="@+id/textView13"
         app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView13"
         app:layout_constraintVertical_bias="0.705" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

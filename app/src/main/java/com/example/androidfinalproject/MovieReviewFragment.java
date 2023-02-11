@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,14 @@ public class MovieReviewFragment extends Fragment {
         binding.listReviewRV.setAdapter(adapter);
         binding.movieReviewsNameTxt.setText(movie.getTitle());
         binding.movieReviewsGenresTxt.setText(movie.getMovieVoteAverage());
+        if (movie.getMovieImageUrl() != null &&
+                !movie.getMovieImageUrl().equals("")) {
+            Picasso.get()
+                    .load("https://image.tmdb.org/t/p/w500"+movie.getMovieImageUrl())
+                    .into(binding.movieReviewsImg);
+        } else {
+            binding.movieReviewsImg.setImageResource(R.drawable.empty_movie);
+        }
 
         reviewList.setAdapter(adapter);
         Model.instance().getLoadingState().observe(getViewLifecycleOwner(), loadingState -> {
@@ -89,15 +98,6 @@ public class MovieReviewFragment extends Fragment {
 
         // Get all the reviews of the movie
         ReviewListViewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
-
-        if (movie.getMovieImageUrl() != null &&
-                !movie.getMovieImageUrl().equals("")) {
-            Picasso.get()
-                    .load(movie.getMovieImageUrl())
-                    .into(binding.movieReviewsImg);
-        } else {
-            binding.movieReviewsImg.setImageResource(R.drawable.empty_movie);
-        }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
