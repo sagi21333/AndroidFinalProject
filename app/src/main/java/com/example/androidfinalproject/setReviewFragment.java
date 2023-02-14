@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.UUID;
 
 public class setReviewFragment extends Fragment {
 
@@ -106,7 +107,7 @@ public class setReviewFragment extends Fragment {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
                     Review review = new Review("", Model.instance().getUserEmail(), movieId, binding.review.getText().toString(), "", false);
 
-                    Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + review.getDocumentId() + movieId, new ModelFirebase.SaveImageListener() {
+                    Model.instance().saveMovieImage(bitmap, UUID.randomUUID().toString(), new ModelFirebase.SaveImageListener() {
                         @Override
                         public void onComplete(String url) {
                             review.setMovieImageUrl(url);
@@ -131,21 +132,28 @@ public class setReviewFragment extends Fragment {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
 
-                        Model.instance().saveMovieImage(bitmap, Model.instance().getUserEmail() + review.getDocumentId() + movieId, new ModelFirebase.SaveImageListener() {
+                        Model.instance().saveMovieImage(bitmap, UUID.randomUUID().toString(), new ModelFirebase.SaveImageListener() {
                             @Override
                             public void onComplete(String url) {
                                 review.setMovieImageUrl(url);
+                                Model.instance().setReview(review, documentId, new ModelFirebase.SetReviewListener() {
+                                    @Override
+                                    public void onComplete() {
+                                        Toast.makeText(MyApplication.getContext(), "Review was successfully updated", Toast.LENGTH_SHORT).show();
+                                        Navigation.findNavController(getView()).popBackStack();
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        Model.instance().setReview(review, documentId, new ModelFirebase.SetReviewListener() {
+                            @Override
+                            public void onComplete() {
+                                Toast.makeText(MyApplication.getContext(), "Review was successfully updated", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(getView()).popBackStack();
                             }
                         });
                     }
-
-                    Model.instance().setReview(review, documentId, new ModelFirebase.SetReviewListener() {
-                        @Override
-                        public void onComplete() {
-                            Toast.makeText(MyApplication.getContext(), "Review was successfully updated", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(getView()).popBackStack();
-                        }
-                    });
                 }
             }
         });
