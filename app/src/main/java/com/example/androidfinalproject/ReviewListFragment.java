@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +34,6 @@ public class ReviewListFragment extends Fragment {
         super.onAttach(context);
         parentFragment = getParentFragment();
         if(parentFragment instanceof MovieReviewFragment){
-//            String movieId = MovieReviewFragmentArgs.fromBundle(getArguments()).getMovieId();
             if(getArguments()!=null) {
                 String movieId = getArguments().getString("movieId");
                 viewModel = new ReviewListViewModel(movieId);
@@ -60,8 +60,10 @@ public class ReviewListFragment extends Fragment {
 
         if (parentFragment instanceof myReviewsFragment) {
             visibility = View.VISIBLE;
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Reviews");
         } else {
             visibility = View.INVISIBLE;
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movie Reviews");
         }
 
        adapter = new ReviewRecyclerAdapter(visibility);

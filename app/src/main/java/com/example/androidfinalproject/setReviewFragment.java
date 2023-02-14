@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -218,6 +219,8 @@ public class setReviewFragment extends Fragment {
                 }
             }
         });
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movies");
 
         return view;
     }
