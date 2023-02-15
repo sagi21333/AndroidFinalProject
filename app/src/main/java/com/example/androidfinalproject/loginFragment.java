@@ -74,8 +74,6 @@ public class loginFragment extends Fragment {
             }
         });
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
-
         toRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -114,8 +114,6 @@ public class MovieReviewFragment extends Fragment {
             }
         });
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movie reviews");
-
         return view;
 
     }
