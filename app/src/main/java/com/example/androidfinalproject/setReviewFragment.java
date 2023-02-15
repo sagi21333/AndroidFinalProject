@@ -220,8 +220,6 @@ public class setReviewFragment extends Fragment {
             }
         });
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Movies");
-
         return view;
     }
 }
