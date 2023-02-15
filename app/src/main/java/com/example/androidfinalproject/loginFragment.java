@@ -2,6 +2,7 @@ package com.example.androidfinalproject;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -72,6 +73,8 @@ public class loginFragment extends Fragment {
                 });
             }
         });
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
 
         toRegister.setOnClickListener(new View.OnClickListener() {
             @Override
