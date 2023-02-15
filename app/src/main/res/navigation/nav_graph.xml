@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    android:label="Sign Up"
     app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.androidfinalproject.loginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
@@ -22,8 +23,8 @@
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.androidfinalproject.registrationFragment"
-        android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration" >
+        android:label="Register"
+        tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/action_registrationFragment_to_moviesFragment"
             app:destination="@id/moviesFragment"
@@ -36,8 +37,8 @@
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.example.androidfinalproject.MoviesFragment"
-        android:label="fragment_movies"
-        tools:layout="@layout/fragment_movies" >
+        android:label="Movies"
+        tools:layout="@layout/fragment_movies">
         <action
             android:id="@+id/action_moviesFragment_to_movieReviewFragment"
             app:destination="@id/movieReviewFragment" />
@@ -51,8 +52,8 @@
     <fragment
         android:id="@+id/movieReviewFragment"
         android:name="com.example.androidfinalproject.MovieReviewFragment"
-        android:label="fragment_movie_review"
-        tools:layout="@layout/fragment_movie_review" >
+        android:label="Movie"
+        tools:layout="@layout/fragment_movie_review">
         <argument
             android:name="MovieId"
             app:argType="string" />
@@ -63,13 +64,13 @@
     <fragment
         android:id="@+id/userDetailsFragment"
         android:name="com.example.androidfinalproject.userDetailsFragment"
-        android:label="fragment_user_details"
+        android:label="Profile"
         tools:layout="@layout/fragment_user_details" />
     <fragment
         android:id="@+id/myReviewsFragment"
         android:name="com.example.androidfinalproject.myReviewsFragment"
-        android:label="fragment_my_reviews"
-        tools:layout="@layout/fragment_my_reviews" >
+        android:label="My Reviews"
+        tools:layout="@layout/fragment_my_reviews">
         <action
             android:id="@+id/action_myReviewsFragment_to_setReviewFragment"
             app:destination="@id/setReviewFragment" />
@@ -77,12 +78,13 @@
     <fragment
         android:id="@+id/setReviewFragment"
         android:name="com.example.androidfinalproject.setReviewFragment"
-        android:label="fragment_set_review"
-        tools:layout="@layout/fragment_set_review" >
+        android:label="Set Review"
+        tools:layout="@layout/fragment_set_review">
         <argument
             android:name="MovieId"
             app:argType="string" />
-        <argument android:name="DocumentId"
+        <argument
+            android:name="DocumentId"
             app:argType="string"
             app:nullable="true" />
         <argument

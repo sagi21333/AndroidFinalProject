@@ -51,8 +51,6 @@ public class registrationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Sign Up");
-
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
